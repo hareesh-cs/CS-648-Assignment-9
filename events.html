@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>jQuery Events Lab</title>
+    <script src="jquery-3.7.1.min.js"></script>
+    <style>
+      .display-span {
+        display: block;
+        width: 400px;
+        height: 30px;
+        background-color: #eee;
+        margin-top: 10px;
+        padding: 5px;
+      }
+      .resize-div {
+        width: 100%;
+        padding: 10px;
+        background-color: #f0f0f0;
+        margin-top: 10px;
+      }
+      .input-field {
+        margin-top: 10px;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="button1">Click Me! (.click method)</button><br /><br />
+    <button id="button2">Click Me! (.bind method)</button><br /><br />
+    <button id="button3">Click Me! (.on method)</button><br /><br />
+    <button id="button4">Click Me Too! (.on shared handler)</button><br /><br />
+    <button id="button5">Click Me Too! (.on shared handler)</button><br /><br />
+
+    <div class="interactive-div"></div>
+    <br />
+
+    <span class="display-span"></span><br />
+
+    <a href="https://www.modulemedia.com" id="module-link">Visit Module Media</a
+    ><br />
+
+    <div class="resize-div">
+      Resize the browser window to see dimensions here.
+    </div>
+    <br />
+
+    <input type="text" class="input-field" placeholder="Type here..." /><br />
+
+    <form id="myForm">
+      <input
+        type="text"
+        id="name"
+        name="name"
+        placeholder="Name"
+        class="input-field"
+      />
+      <input
+        type="email"
+        id="email"
+        name="email"
+        placeholder="Email"
+        class="input-field"
+      />
+      <input type="submit" value="Submit" />
+    </form>
+
+    <script>
+      $(document).ready(function () {
+        $("#button1").click(function () {
+          alert("The button has been clicked! (.click method)");
+        });
+
+        $("#button2").bind("click", function () {
+          alert("The button has been clicked! (.bind method)");
+        });
+
+        $("#button3").on("click", function () {
+          alert("The button has been clicked! (.on method)");
+        });
+
+        $("#button4, #button5").on("click", function () {
+          alert("A button has been clicked!");
+        });
+
+        $(".interactive-div").css({
+          width: "400px",
+          height: "400px",
+          "background-color": "silver",
+        });
+
+        $(".interactive-div").on({
+          click: function () {
+            alert("The div was clicked!");
+          },
+          mouseenter: function () {
+            alert("Mouse entered the div!");
+          },
+          mouseleave: function () {
+            alert("Mouse left the div!");
+          },
+        });
+
+        $(".interactive-div").on({
+          click: function () {
+            $(".display-span").text("The div was clicked!");
+          },
+          mouseenter: function () {
+            $(".display-span").text("Mouse entered the div!");
+          },
+          mouseleave: function () {
+            $(".display-span").text("Mouse left the div!");
+          },
+        });
+
+        $("#module-link").on("click", function (event) {
+          event.preventDefault();
+          $(this).css("color", "red");
+          alert("Node name: " + event.target.nodeName);
+        });
+
+        $(window).on("resize", function () {
+          $(".resize-div").text(
+            "Width: " +
+              $(window).width() +
+              "px, Height: " +
+              $(window).height() +
+              "px"
+          );
+        });
+
+        $(".input-field").on({
+          focus: function () {
+            $(this).css("background-color", "lightgray");
+          },
+          blur: function () {
+            $(this).css("background-color", "white");
+          },
+        });
+
+        $("#myForm").on("submit", function (event) {
+          event.preventDefault();
+          let isValid = true;
+
+          if ($("#name").val().trim() === "") {
+            $("#name").css("border", "1px solid red");
+            isValid = false;
+          } else {
+            $("#name").css("border", "1px solid green");
+          }
+
+          if ($("#email").val().trim() === "") {
+            $("#email").css("border", "1px solid red");
+            isValid = false;
+          } else {
+            $("#email").css("border", "1px solid green");
+          }
+
+          if (!isValid) {
+            alert("All fields are required!");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
